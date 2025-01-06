@@ -127,7 +127,7 @@
     <div id="editModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h3 class="text-xl font-semibold mb-4">Edit Category</h3>
-            <form action="{{ route('categories.update', $category->id) }}" method="POST" enctype="multipart/form-data">
+            <form id="editCategoryForm" method="POST" enctype="multipart/form-data">
                 @csrf
            
                 <div class="mb-4">
