@@ -13,13 +13,9 @@ Route::get('/',function(){
 
 //for Categories
 
-Route::get('/categories',[CategoryController::class,'index'])->name('categories.index'); //list of categories
-Route::get('/categories/create',[CategoryController::class,'create'])->name('categories.create'); //create
-Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy'); //Delete
-Route::post('/categories/update/{id}', [CategoryController::class, 'update'])->name('categories.update');
-Route::get('/categories/{id}/edit',[CategoryController::class,'edit'])->name('categories.edit');
-Route::post('/categories',[CategoryController::class,'store'])->name('categories.store'); //steore 
 
+
+Route::resource('categories', CategoryController::class);
 
 
 

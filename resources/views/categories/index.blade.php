@@ -1,80 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Category Management</title>
     @vite('resources/css/app.css')
 </head>
-<body class="bg-gray-100 m-5">
+
+<body class="m-5 bg-gray-100">
 
     <!-- Navigation Links -->
     <div class="space-y-6">
-        <a href="{{ route('categories.index') }}" class=" mt-10 rounded-lg bg-gray-500 p-4 text-white text-center">Categories</a>
-        <a href="{{ route('subcategories.index') }}" class=" mt-10 rounded-lg bg-green-500 p-4 text-white text-center">Sub-Categories</a>
-        <a href="{{ route('products.index') }}" class=" mt-10 rounded-lg bg-green-500 p-4 text-white text-center">Products</a>
+        <a href="{{ route('categories.index') }}" class="p-4 mt-10 text-center text-white bg-gray-500 rounded-lg">Categories</a>
+        <a href="{{ route('subcategories.index') }}" class="p-4 mt-10 text-center text-white bg-green-500 rounded-lg">Sub-Categories</a>
+        <a href="{{ route('products.index') }}" class="p-4 mt-10 text-center text-white bg-green-500 rounded-lg">Products</a>
     </div>
 
     <!-- Category Section -->
     <section class="w-full p-6 mt-8">
-        <h2 class="text-3xl font-semibold text-center text-red-800 mb-6">Category</h2>
+        <h2 class="mb-6 text-3xl font-semibold text-center text-red-800">Category</h2>
 
         <!-- Add Category Button -->
-        <div class="text-left mb-6">
-            <button id="addCategoryButton" class="bg-blue-800 text-white py-2 px-4 rounded-lg hover:bg-blue-600">Add Category</button>
+        <div class="mb-6 text-left">
+            <button id="addCategoryButton" class="px-4 py-2 text-white bg-blue-800 rounded-lg hover:bg-blue-600">Add Category</button>
         </div>
 
         <!-- Validation Errors -->
         @if ($errors->any())
-            <div class="bg-red-500 text-white p-4 rounded mb-4">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
+        <div class="p-4 mb-4 text-white bg-red-500 rounded">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
         @endif
 
         <!-- Success Message -->
         @if (session('success'))
-            <div class="bg-green-500 text-white p-4 rounded mb-4">
-                {{ session('success') }}
-            </div>
+        <div class="p-4 mb-4 text-white bg-green-500 rounded">
+            {{ session('success') }}
+        </div>
         @endif
 
         <!-- Categories Table -->
-        <table class="w-full bg-white border border-gray-300 shadow-lg rounded-lg overflow-hidden">
+        <table class="w-full overflow-hidden bg-white border border-gray-300 rounded-lg shadow-lg">
             <thead class="bg-gray-100">
                 <tr>
-                    <th class="px-6 py-4 text-lg font-medium text-gray-700 text-center">S.No.</th>
-                    <th class="px-6 py-4 text-lg font-medium text-gray-700 text-center">Name</th>
-                    <th class="px-6 py-4 text-lg font-medium text-gray-700 text-center">Status</th>
-                    <th class="px-6 py-4 text-lg font-medium text-gray-700 text-center">Actions</th>
+                    <th class="px-6 py-4 text-lg font-medium text-center text-gray-700">S.No.</th>
+                    <th class="px-6 py-4 text-lg font-medium text-center text-gray-700">Name</th>
+                    <th class="px-6 py-4 text-lg font-medium text-center text-gray-700">Status</th>
+                    <th class="px-6 py-4 text-lg font-medium text-center text-gray-700">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($categories as $index => $category)
                 <tr class="border-b border-gray-200 hover:bg-gray-50">
-                    <td class="px-6 py-4 text-center text-sm text-gray-800">{{ $index + 1 }}.</td>
-                    <td class="px-6 py-4 text-center text-sm text-gray-800">{{ $category->name }}</td>
-                    <td class="px-6 py-4 text-center text-sm text-gray-800">{{ ucfirst($category->status) }}</td>
-                    <td class="px-6 py-4 text-center text-sm text-gray-800">
+                    <td class="px-6 py-4 text-sm text-center text-gray-800">{{ $index + 1 }}.</td>
+                    <td class="px-6 py-4 text-sm text-center text-gray-800">{{ $category->name }}</td>
+                    <td class="px-6 py-4 text-sm text-center text-gray-800">{{ ucfirst($category->status) }}</td>
+                    <td class="px-6 py-4 text-sm text-center text-gray-800">
                         <!-- Edit Button -->
-                        <button type="button" class="bg-blue-400 text-white py-1 px-2 rounded editButton"
+                        <button class="px-2 py-1 text-white bg-blue-400 rounded editButton"
                             data-id="{{ $category->id }}"
                             data-name="{{ $category->name }}"
                             data-status="{{ $category->status }}"
-                            data-image="{{ asset('storage/' . $category->image) }}">
+                            data-image="{{ asset('storage/' . $category->image) }}"
+                            onclick="openEditCategoryModal('{{ $category->id }}', '{{ $category->name }}', '{{ $category->status }}', '{{ asset('storage/' . $category->image) }}')">
                             Edit
                         </button>
 
                         <!-- Delete Form -->
-                        <form action="{{ route('categories.destroy', $category->id) }}" method="POST" class="inline-block">
-    @csrf
-    @method('DELETE')
-    <button type="submit" class="bg-red-500 text-white py-1 px-2 rounded deleteButton">Delete</button>
-</form>
-
+                        <form action="{{ route('categories.destroy', $category->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this category?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="px-2 py-1 text-white bg-red-500 rounded deleteButton">Delete</button>
+                        </form>
                     </td>
                 </tr>
                 @endforeach
@@ -88,164 +90,151 @@
     </section>
 
     <!-- Add Category Modal -->
-    <div id="addCategoryModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden ">
-        <div class="bg-white p-6 rounded-lg shadow-xl w-96 ">
-            <h3 class="text-xl font-semibold text-center mb-4">Add New Category</h3>
-            <form id="addCategoryForm" action="{{ route('categories.store') }}" method="POST" enctype="multipart/form-data">
+    <div class="fixed inset-0 flex items-center justify-center hidden overflow-y-auto bg-gray-500 bg-opacity-75" id="addCategoryModal">
+        <div class="w-1/3 p-6 overflow-y-auto bg-white rounded-lg">
+            <h2 class="mb-4 text-xl">Add Category</h2>
+            <form action="{{ route('categories.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                    <input type="text" name="name" id="name" class="w-full mt-1 p-3 border border-gray-300 rounded-lg" placeholder="Enter category name" required>
-              
-
+                @if ($errors->any())
+                <div class="p-4 mb-4 text-white bg-red-500 rounded">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
                 <div class="mb-4">
-                    <label for="status" class="block text-gray-700 font-medium">Status</label>
-                    <select name="status" id="status" class="w-full mt-1 p-3 border border-gray-300 rounded-lg" required>
-                        <option value="active">Active</option>
+                    <label for="category_name" class="block">Name</label>
+                    <input type="text" name="name" id="category_name" class="w-full p-2 border border-gray-300 rounded" required>
+                </div>
+                <div class="mb-4">
+                    <label for="category_status" class="block">Status</label>
+                    <select name="status" id="category_status" class="w-full p-2 border border-gray-300 rounded">
+                        <option value="active" selected>Active</option>
                         <option value="inactive">Inactive</option>
                     </select>
                 </div>
-
-                <!-- Image Upload -->
                 <div class="mb-4">
-                    <label for="image" class="block text-gray-700 font-medium">Upload Image</label>
-                    <input type="file" name="image" id="image" accept="image/*" class="w-full mt-1 p-3 border border-gray-300 rounded-lg">
-
-                     <!-- Image Preview -->
-                <div id="imagePreview" class="mt-3 hidden">
-                    <img id="previewImage" src="" alt="Image Preview" class="w-full h-48 object-cover rounded-lg">
+                    <label for="category_image" class="block font-medium text-gray-700">Upload Image</label>
+                    <input type="file" name="image" id="category_image" accept="image/*" class="w-full p-3 mt-1 border border-gray-300 rounded-lg">
+                    <!-- Image Preview -->
+                    <div id="imagePreview" class="hidden mt-3">
+                        <img id="previewImage" src="" alt="Image Preview" class="object-cover w-full h-48 rounded-lg">
+                    </div>
                 </div>
-                </div>
-
-                <div class="text-center">
-                    <button type="submit" class="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600">Add Category</button>
-                </div>
+                <button type="submit" class="px-4 py-2 mt-1 text-white bg-blue-500 rounded">Save</button>
             </form>
-            <button id="closeAddCategoryModalButton" class="mt-4 text-red-500">Close</button>
+            <button id="closeAddCategoryModalButton" class="px-4 py-2 mt-4 text-white bg-red-500 rounded">Cancel</button>
         </div>
     </div>
 
     <!-- Edit Category Modal -->
-    <div id="editModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h3 class="text-xl font-semibold mb-4">Edit Category</h3>
+    <div class="fixed inset-0 flex items-center justify-center hidden overflow-y-auto bg-gray-500 bg-opacity-75" id="editCategoryModal">
+        <div class="w-1/3 p-6 overflow-y-auto bg-white rounded-lg">
+            <h2 class="mb-4 text-xl">Edit Category</h2>
             <form id="editCategoryForm" method="POST" enctype="multipart/form-data">
                 @csrf
-           
-                <div class="mb-4">
-                    <label for="editName" class="bloc
-                    k text-gray-700 font-medium">Category Name</label>
-                    <input type="text" id="editName" name="name" class="w-full mt-1 p-3 border border-gray-300 rounded-lg" required>
+                @method('PUT')
+                @if ($errors->any())
+                <div class="p-4 mb-4 text-white bg-red-500 rounded">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
-
+                @endif
                 <div class="mb-4">
-                    <label for="editStatus" class="block text-gray-700 font-medium">Status</label>
-                    <select name="status" id="editStatus" class="w-full mt-1 p-3 border border-gray-300 rounded-lg" required>
+                    <label for="edit_category_name" class="block">Name</label>
+                    <input type="text" name="name" id="edit_category_name" class="w-full p-2 border border-gray-300 rounded" required>
+                </div>
+                <div class="mb-4">
+                    <label for="edit_category_status" class="block">Status</label>
+                    <select name="status" id="edit_category_status" class="w-full p-2 border border-gray-300 rounded">
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
                     </select>
                 </div>
-
-                <!-- Image Upload for Edit -->
                 <div class="mb-4">
-                    <label for="editImage" class="block text-gray-700 font-medium">Upload Image</label>
-                    <input type="file" name="image" id="editImage" accept="image/*" class="w-full p-3 border border-gray-300 rounded-lg" onchange="previewImage(event)">
-                    <div id="editImagePreview" class="mt-4">
-                        <img id="editPreviewImage" src="" alt="Preview" class="w-32 h-32 rounded border hidden">
-                        <p id="currentImageText" class="mt-2 text-gray-600">No image uploaded</p>
+                    <label for="editCategoryImage" class="block font-medium text-gray-700">Upload Image</label>
+                    <input type="file" name="image" id="editCategoryImage" accept="image/*" class="w-full p-3 border border-gray-300 rounded-lg" onchange="previewEditImage(event)">
+                    <!-- Image Preview Section -->
+                    <div id="editCategoryImagePreview" class="mt-4">
+                        <img id="editCategoryPreviewImage" src="" alt="Preview" class="hidden w-32 h-32 border rounded">
+                        <p id="currentImageText" class="hidden mt-2 text-gray-600">No image uploaded</p>
                     </div>
                 </div>
-
-                <div class="text-center">
-                    <button type="submit" class="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600">Update Category</button>
-                </div>
+                <button type="submit" class="px-4 py-2 mt-1 text-white bg-blue-500 rounded">Save</button>
             </form>
-            <button id="closeEditModalButton" class="mt-4 text-red-500">Close</button>
+            <button id="closeEditCategoryModalButton" class="px-4 py-2 mt-4 text-white bg-red-500 rounded">Cancel</button>
         </div>
     </div>
 
-    <!-- Scripts -->
     <script>
-        // Image Preview
-        function previewImage(event) {
-            const file = event.target.files[0];
-            const preview = event.target.id === 'editImage' ? document.getElementById('editPreviewImage') : document.getElementById('previewImage');
-            const currentImageText = document.getElementById('currentImageText');
-
+        // Image Preview for Add Category Modal
+        document.getElementById('category_image').addEventListener('change', function () {
+            const file = this.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.classList.remove('hidden');
-                };
+                reader.onload = function (e) {
+                    document.getElementById('imagePreview').classList.remove('hidden');
+                    document.getElementById('previewImage').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Image Preview for Edit Category Modal
+        function previewEditImage(event) {
+            const file = event.target.files[0];
+            const previewImage = document.getElementById('editCategoryPreviewImage');
+            const currentImageText = document.getElementById('currentImageText');
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    previewImage.src = e.target.result;
+                    previewImage.classList.remove('hidden');
+                    currentImageText.classList.add('hidden');
+                }
                 reader.readAsDataURL(file);
             } else {
-                preview.classList.add('hidden');
-                if (currentImageText) {
-                    currentImageText.textContent = "No image uploaded";
-                }
+                previewImage.classList.add('hidden');
+                currentImageText.classList.remove('hidden');
             }
         }
 
-        // Open and Close Modals
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.remove('hidden');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
-        }
-        document.getElementById('addCategoryButton').addEventListener('click', function() {
+        // Open Add Category Modal
+        document.getElementById('addCategoryButton').addEventListener('click', function () {
             document.getElementById('addCategoryModal').classList.remove('hidden');
         });
 
-        // Close the Add Category Modal
-        document.getElementById('closeAddCategoryModalButton').addEventListener('click', function() {
+        // Close Add Category Modal
+        document.getElementById('closeAddCategoryModalButton').addEventListener('click', function () {
             document.getElementById('addCategoryModal').classList.add('hidden');
         });
-        document.getElementById('image').addEventListener('change', function(event) {
-        const file = event.target.files[0];
 
-        if (file) {
-            const reader = new FileReader();
+        // Open Edit Category Modal
+        function openEditCategoryModal(id, name, status, image) {
+            document.getElementById('editCategoryModal').classList.remove('hidden');
+            document.getElementById('edit_category_name').value = name;
+            document.getElementById('edit_category_status').value = status;
+            document.getElementById('editCategoryForm').action = '/categories/' + id;
 
-            reader.onload = function(e) {
-                const preview = document.getElementById('imagePreview');
-                const previewImage = document.getElementById('previewImage');
-                
-                previewImage.src = e.target.result;
-                preview.classList.remove('hidden'); // Show the preview
-            };
-
-            reader.readAsDataURL(file);
+            // Set preview image for Edit Modal
+            const previewImage = document.getElementById('editCategoryPreviewImage');
+            const currentImageText = document.getElementById('currentImageText');
+            previewImage.src = image;
+            previewImage.classList.remove('hidden');
+            currentImageText.classList.add('hidden');
         }
-    });
 
-        // Edit Button Logic
-        document.querySelectorAll('.editButton').forEach(button => {
-            button.addEventListener('click', (event) => {
-                const categoryId = event.target.getAttribute('data-id');
-                const categoryName = event.target.getAttribute('data-name');
-                const categoryStatus = event.target.getAttribute('data-status');
-                const categoryImage = event.target.getAttribute('data-image');
-
-                document.getElementById('editName').value = categoryName;
-                document.getElementById('editStatus').value = categoryStatus;
-               
-
-                const editPreviewImage = document.getElementById('editPreviewImage');
-                const currentImageText = document.getElementById('currentImageText');
-                if (categoryImage) {
-                    editPreviewImage.src = categoryImage;
-                    editPreviewImage.classList.remove('hidden');
-                    currentImageText.textContent = "Current Image";
-                }
-
-                openModal('editModal');
-            });
+        // Close Edit Category Modal
+        document.getElementById('closeEditCategoryModalButton').addEventListener('click', function () {
+            document.getElementById('editCategoryModal').classList.add('hidden');
         });
-
-        // Close modals
-        document.getElementById('closeAddCategoryModalButton').addEventListener('click', () => closeModal('addCategoryModal'));
-        document.getElementById('closeEditModalButton').addEventListener('click', () => closeModal('editModal'));
     </script>
+
 </body>
+
 </html>
