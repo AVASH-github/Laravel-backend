@@ -5,51 +5,51 @@
     <title>Products</title>
     @vite('resources/css/app.css')
 </head>
-<body class="bg-gray-100 m-5">
-    <a href="{{route('categories.index')}}" class="bg-green-500 rounded-lg p-4 mt-10 text-white">Category</a>
-    <a href="{{route('subcategories.index')}}" class="bg-green-500 rounded-lg p-4 mt-10 text-white">Sub-Category</a>
-    <a href="{{route('products.index')}}" class="bg-gray-500 rounded-lg p-4 mt-10 text-white">Products</a>
-    <a href="{{route('galleries.index')}}"  class="mt-10 rounded-lg bg-green-500 p-4 text-white">Gallery</a>
+<body class="m-5 bg-gray-100">
+    <a href="{{route('categories.index')}}" class="p-4 mt-10 text-white bg-green-500 rounded-lg">Category</a>
+    <a href="{{route('subcategories.index')}}" class="p-4 mt-10 text-white bg-green-500 rounded-lg">Sub-Category</a>
+    <a href="{{route('products.index')}}" class="p-4 mt-10 text-white bg-gray-500 rounded-lg">Products</a>
+    <a href="{{route('galleries.index')}}"  class="p-4 mt-10 text-white bg-green-500 rounded-lg">Gallery</a>
 
-    <section class="w-full mt-8 p-6">
-        <h2 class="text-3xl text-center font-semibold text-red-800">Products</h2>
+    <section class="w-full p-6 mt-8">
+        <h2 class="text-3xl font-semibold text-center text-red-800">Products</h2>
 
         <div>
-            <button id="addProductButton" class="bg-blue-800 rounded-lg px-4 py-4 text-white hover:bg-blue-600">Add Product</button>
+            <button id="addProductButton" class="px-4 py-4 text-white bg-blue-800 rounded-lg hover:bg-blue-600">Add Product</button>
         </div>
            <!-- Success Message -->
            @if (session('success'))
-            <div class="bg-green-500 text-white p-4 rounded mb-4 mt-4">
+            <div class="p-4 mt-4 mb-4 text-white bg-green-500 rounded">
                 {{ session('success') }}
             </div>
         @endif
 
         <!-- Product Table -->
-        <table class="w-full bg-white border border-red-800 shadow-lg rounded-lg overflow-hidden mt-4 ">
+        <table class="w-full mt-4 overflow-hidden bg-white border border-red-800 rounded-lg shadow-lg ">
             <thead class="bg-gray-100">
                 <tr>
-                    <th class="text-lg font-medium px-4 py-4 text-gray-700 text-center">S.No.</th>
-                    <th class="text-lg font-medium px-4 py-4 text-gray-700 text-center">Name</th>
-                    <th class="text-lg font-medium px-4 py-4 text-gray-700 text-center">Category</th>
-                    <th class="text-lg font-medium px-4 py-4 text-gray-700 text-center">Subcategory</th>
-                    <th class="text-lg font-medium px-4 py-4 text-gray-700 text-center">Description</th>
-                    <th class="text-lg font-medium px-4 py-4 text-gray-700 text-center">Status</th>
-                    <th class="text-lg font-medium px-4 py-4 text-gray-700 text-center">Actions</th>
+                    <th class="px-4 py-4 text-lg font-medium text-center text-gray-700">S.No.</th>
+                    <th class="px-4 py-4 text-lg font-medium text-center text-gray-700">Name</th>
+                    <th class="px-4 py-4 text-lg font-medium text-center text-gray-700">Category</th>
+                    <th class="px-4 py-4 text-lg font-medium text-center text-gray-700">Subcategory</th>
+                    <th class="px-4 py-4 text-lg font-medium text-center text-gray-700">Description</th>
+                    <th class="px-4 py-4 text-lg font-medium text-center text-gray-700">Status</th>
+                    <th class="px-4 py-4 text-lg font-medium text-center text-gray-700">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($products as $index => $product )
                 <tr class="border-b border-gray-200 hover:bg-gray-50">
-                  <td class="text-gray-800 text-center text-sm px-6 py-4">{{$index+1}}</td>
-                  <td class="text-gray-800 text-center text-sm px-6 py-4">{{$product->name}}</td>
-                  <td class="text-gray-800 text-center text-sm px-6 py-4">{{$product->category->name}}</td>
-                  <td class="text-gray-800 text-center text-sm px-6 py-4">{{$product->subcategory->name}}</td>
-                  <td class="text-gray-800 text-center text-sm px-6 py-4">{{$product->description}}</td>
-                  <td class="text-gray-800 text-center text-sm px-6 py-4">{{$product->status}}</td>
-                  <td class="px-6 py-4 text-center text-sm text-gray-800">
+                  <td class="px-6 py-4 text-sm text-center text-gray-800">{{$index+1}}</td>
+                  <td class="px-6 py-4 text-sm text-center text-gray-800">{{$product->name}}</td>
+                  <td class="px-6 py-4 text-sm text-center text-gray-800">{{$product->category->name}}</td>
+                  <td class="px-6 py-4 text-sm text-center text-gray-800">{{$product->subcategory->name}}</td>
+                  <td class="px-6 py-4 text-sm text-center text-gray-800">{{$product->description}}</td>
+                  <td class="px-6 py-4 text-sm text-center text-gray-800">{{$product->status}}</td>
+                  <td class="px-6 py-4 text-sm text-center text-gray-800">
                     <!-- Edit Button -->
                     <button 
-                        class="bg-blue-400 text-white py-1 px-2 rounded"
+                        class="px-2 py-1 text-white bg-blue-400 rounded"
                         onclick="openEditProductModal({{ $product->id }}, '{{ $product->name }}', '{{ $product->description }}', '{{ $product->status }}', '{{ $product->category_id }}', '{{ $product->subcategory_id }}', '{{ asset('storage/'.$product->image) }}')">
                         Edit
                     </button>
@@ -57,7 +57,7 @@
                     <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="inline deleteForm">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="bg-red-500 text-white py-1 px-2 rounded deleteButton">
+                        <button type="submit" class="px-2 py-1 text-white bg-red-500 rounded deleteButton">
                             Delete
                         </button>
                     </form>
@@ -69,13 +69,13 @@
     </section>
 
     <!-- ADD PRODUCT MODAL -->
-    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center hidden overflow-y-auto" id="addProductModal">
-        <div class="bg-white p-6 rounded-lg w-1/3 overflow-y-auto">
-            <h2 class="text-xl mb-4">Add Product</h2>
+    <div class="fixed inset-0 flex items-center justify-center hidden overflow-y-auto bg-gray-500 bg-opacity-75" id="addProductModal">
+        <div class="w-1/3 p-6 overflow-y-auto bg-white rounded-lg">
+            <h2 class="mb-4 text-xl">Add Product</h2>
             <form action="{{route('products.store')}}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @if ($errors->any())
-                <div class="bg-red-500 text-white p-4 rounded mb-4">
+                <div class="p-4 mb-4 text-white bg-red-500 rounded">
                     <ul>
                         @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -115,29 +115,29 @@
                     </select>
                 </div>
                 <div class="mb-4">
-                    <label for="image" class="block text-gray-700 font-medium">Upload Image</label>
-                    <input type="file" name="image" id="image" accept="image/*" class="w-full mt-1 p-3 border border-gray-300 rounded-lg">
+                    <label for="image" class="block font-medium text-gray-700">Upload Image</label>
+                    <input type="file" name="image" id="image" accept="image/*" class="w-full p-3 mt-1 border border-gray-300 rounded-lg">
 
                     <!-- Image Preview -->
-                    <div id="imagePreview" class="mt-3 hidden">
-                        <img id="previewImage" src="" alt="Image Preview" class="w-full h-48 object-cover rounded-lg">
+                    <div id="imagePreview" class="hidden mt-3">
+                        <img id="previewImage" src="" alt="Image Preview" class="object-cover w-full h-48 rounded-lg">
                     </div>
                 </div>
-                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded mt-1"> Save</button>
+                <button type="submit" class="px-4 py-2 mt-1 text-white bg-blue-500 rounded"> Save</button>
             </form>
-            <button id="closeAddProductModalButton" type="submit" class="bg-red-500 text-white py-2 px-4 rounded mt-4"> Cancel</button>
+            <button id="closeAddProductModalButton" type="submit" class="px-4 py-2 mt-4 text-white bg-red-500 rounded"> Cancel</button>
         </div>
     </div>
 
     <!-- EDIT PRODUCT MODAL -->
-    <div id="editProductModal" class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
+    <div id="editProductModal" class="fixed inset-0 flex items-center justify-center hidden bg-gray-500 bg-opacity-75">
         <div class="bg-white p-6 rounded-lg w-1/3 max-h-[90vh] overflow-y-auto">
-            <h2 class="text-xl mb-4">Edit Product</h2>
+            <h2 class="mb-4 text-xl">Edit Product</h2>
             <form id="editProductForm" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 @if ($errors->any())
-                <div class="bg-red-500 text-white p-4 rounded mb-4">
+                <div class="p-4 mb-4 text-white bg-red-500 rounded">
                     <ul>
                         @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -175,16 +175,16 @@
                     </select>
                 </div>
                 <div class="mb-4">
-                    <label for="editImage" class="block text-gray-700 font-medium">Upload Image</label>
+                    <label for="editImage" class="block font-medium text-gray-700">Upload Image</label>
                     <input type="file" name="image" id="editProductImage" accept="image/jpeg, image/png, image/jpg, image/gif" class="w-full p-3 border border-gray-300 rounded-lg" onchange="previewImage(event)">
                     <div id="editImagePreview" class="mt-4">
-                        <img id="editPreviewImage" src="" alt="Preview" class="w-32 h-32 rounded border hidden">
+                        <img id="editPreviewImage" src="" alt="Preview" class="hidden w-32 h-32 border rounded">
                         <p id="currentImageText" class="mt-2 text-gray-600" class="hidden">No image uploaded</p>
                     </div>
                 </div>
-                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">Save</button>
+                <button type="submit" class="px-4 py-2 text-white bg-blue-500 rounded">Save</button>
             </form>
-            <button id="closeEditProductModalButton" class="bg-red-500 text-white py-2 px-4 rounded mt-4">
+            <button id="closeEditProductModalButton" class="px-4 py-2 mt-4 text-white bg-red-500 rounded">
                 Cancel
             </button>
         </div>
