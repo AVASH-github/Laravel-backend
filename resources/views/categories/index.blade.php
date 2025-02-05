@@ -130,10 +130,17 @@
     </div>
 
     <!-- Edit Category Modal -->
+<<<<<<< HEAD
     <div class="fixed inset-0 flex items-center justify-center hidden overflow-y-auto bg-gray-500 bg-opacity-75" id="editCategoryModal">
         <div class="w-1/3 p-6 overflow-y-auto bg-white rounded-lg">
             <h2 class="mb-4 text-xl">Edit Category</h2>
             <form id="editCategoryForm" method="POST" enctype="multipart/form-data">
+=======
+    <div id="editModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h3 class="text-xl font-semibold mb-4">Edit Category</h3>
+            <form action="editCategoryForm" method="POST" enctype="multipart/form-data">
+>>>>>>> 1fe287b6d6ad5002288c5fbbba37510cc649abd0
                 @csrf
                 @method('PUT')
                 @if ($errors->any())
